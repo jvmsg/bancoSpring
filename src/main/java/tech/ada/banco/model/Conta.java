@@ -19,6 +19,8 @@ import tech.ada.banco.exceptions.SaldoInsuficienteException;
 import tech.ada.banco.exceptions.ValorInvalidoException;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "CONTA")
@@ -69,7 +71,7 @@ public class Conta {
             throw new ValorInvalidoException();
         }
 
-        saldo = saldo.add(valor);
+        saldo = saldo.add(valor.setScale(2, RoundingMode.HALF_EVEN));
     }
 
     public void saque(BigDecimal valor) {
@@ -80,7 +82,7 @@ public class Conta {
         if (valor.compareTo(saldo) > 0) {
             throw new SaldoInsuficienteException();
         } else {
-            saldo = saldo.subtract(valor);
+            saldo = saldo.subtract(valor.setScale(2, RoundingMode.HALF_EVEN));
         }
     }
 

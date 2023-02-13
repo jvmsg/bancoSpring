@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import tech.ada.banco.model.Conta;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,7 +46,7 @@ class SaqueControllerTest extends BaseContaTest {
 
         contaBase = obtemContaDoBanco(contaBase);
         assertEquals("0.00", response);
-        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), contaBase.getSaldo());
+        assertEquals(BigDecimal.ZERO.setScale(2), contaBase.getSaldo());
     }
 
     @Test
@@ -64,7 +63,7 @@ class SaqueControllerTest extends BaseContaTest {
 
         contaBase = obtemContaDoBanco(contaBase);
         assertEquals("Limite acima do saldo disponível!", response);
-        assertEquals(BigDecimal.ONE, contaBase.getSaldo());
+        assertEquals(BigDecimal.ONE.setScale(2), contaBase.getSaldo());
 
     }
 
@@ -82,7 +81,7 @@ class SaqueControllerTest extends BaseContaTest {
 
         contaBase = obtemContaDoBanco(contaBase);
         assertEquals("Valor informado está inválido.", response);
-        assertEquals(BigDecimal.ONE, contaBase.getSaldo());
+        assertEquals(BigDecimal.ONE.setScale(2), contaBase.getSaldo());
 
     }
 
@@ -100,7 +99,7 @@ class SaqueControllerTest extends BaseContaTest {
 
         contaBase = obtemContaDoBanco(contaBase);
         assertEquals("7.00", response);
-        assertEquals(BigDecimal.valueOf(7).setScale(2, RoundingMode.HALF_UP), contaBase.getSaldo());
+        assertEquals(BigDecimal.valueOf(7).setScale(2), contaBase.getSaldo());
     }
 
     @Test
@@ -117,7 +116,7 @@ class SaqueControllerTest extends BaseContaTest {
 
         contaBase = obtemContaDoBanco(contaBase);
         assertEquals("6.30", response);
-        assertEquals(BigDecimal.valueOf(6.3).setScale(2, RoundingMode.HALF_UP), contaBase.getSaldo());
+        assertEquals(BigDecimal.valueOf(6.3).setScale(2), contaBase.getSaldo());
     }
 
     @Test
@@ -135,7 +134,7 @@ class SaqueControllerTest extends BaseContaTest {
                         .andReturn().getResponse().getContentAsString();
 
         contaBase = obtemContaDoBanco(contaBase);
-        assertEquals(BigDecimal.valueOf(10), contaBase.getSaldo());
+        assertEquals(BigDecimal.valueOf(10).setScale(2), contaBase.getSaldo());
     }
 
 }
