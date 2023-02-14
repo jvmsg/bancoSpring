@@ -20,7 +20,6 @@ public class Deposito {
     }
 
     public BigDecimal executar(int numeroConta, BigDecimal valor) {
-        valor = valor.setScale(2, RoundingMode.HALF_UP);
 
         Conta conta = repository.findContaByNumeroConta(numeroConta).orElseThrow(ResourceNotFoundException::new);
         conta.deposito(valor);
