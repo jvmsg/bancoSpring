@@ -2,6 +2,7 @@ package tech.ada.banco.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tech.ada.banco.exceptions.ContaOrigemIgualDestinoException;
 import tech.ada.banco.exceptions.ResourceNotFoundException;
 import tech.ada.banco.model.Conta;
 import tech.ada.banco.repository.ContaRepository;
@@ -19,6 +20,10 @@ public class Pix {
     }
 
     public BigDecimal executar(int contaOrigem, int contaDestino, BigDecimal valor) {
+        if (contaOrigem == contaDestino) {
+            throw new ContaOrigemIgualDestinoException();
+        }
+
         Conta origem = repository.findContaByNumeroConta(contaOrigem).orElseThrow(ResourceNotFoundException::new);
         Conta destino = repository.findContaByNumeroConta(contaDestino).orElseThrow(ResourceNotFoundException::new);
 
