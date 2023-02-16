@@ -20,6 +20,6 @@ public class PixController {
     @PostMapping("{conta}")
     public BigDecimal createPixTransaction(@PathVariable int conta, @RequestParam int destino,
                                            @RequestParam BigDecimal valor) {
-        return pix.executar(conta, destino, valor);
+            return pix.executar(conta, destino, valor);
     }
 }

@@ -8,6 +8,7 @@ import tech.ada.banco.model.Conta;
 import tech.ada.banco.repository.ContaRepository;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 @Slf4j
@@ -23,6 +24,8 @@ public class Pix {
         if (contaOrigem == contaDestino) {
             throw new ContaOrigemIgualDestinoException();
         }
+
+        valor = valor.setScale(2, RoundingMode.HALF_EVEN);
 
         Conta origem = repository.findContaByNumeroConta(contaOrigem).orElseThrow(ResourceNotFoundException::new);
         Conta destino = repository.findContaByNumeroConta(contaDestino).orElseThrow(ResourceNotFoundException::new);

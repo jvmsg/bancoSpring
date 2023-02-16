@@ -24,7 +24,7 @@ public class DepositoTest {
     void testDepositoContaNaoEncontrada() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser 0.00.");
 
         try {
             deposito.executar(1, BigDecimal.ONE);
@@ -34,26 +34,26 @@ public class DepositoTest {
         }
 
         verify(repository, times(0)).save(any());
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo da conta não pode ter sido alterado.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo da conta não pode ter sido alterado.");
     }
 
     @Test
     void testDepositoDeValorNegativo() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
         try {
             deposito.executar(10, BigDecimal.valueOf(-10));
             fail("A conta deveria lançar o erro ValorInvalidoException ao tentar depositar um valor negativo.");
         } catch (ValorInvalidoException e) {}
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo da conta deve continuar sendo igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo da conta deve continuar sendo igual a 0.00.");
     }
 
     @Test
     void testDepositoComSaldoZerado() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
 
         deposito.executar(10, BigDecimal.valueOf(12));
         assertEquals(BigDecimal.valueOf(12).setScale(2), conta.getSaldo(), "O saldo da conta deve ser alterado para 12.00.");
@@ -62,7 +62,7 @@ public class DepositoTest {
     @Test
     void testDepositosConsecutivos() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
 
         deposito.executar(10, BigDecimal.TEN);
@@ -76,7 +76,7 @@ public class DepositoTest {
     void testDepositoDeNumeroQuebrado() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
 
         deposito.executar(10, BigDecimal.valueOf(12.27));
         assertEquals(BigDecimal.valueOf(12.27), conta.getSaldo(), "O saldo da conta deve ser alterado para 12.27");
@@ -86,7 +86,7 @@ public class DepositoTest {
     void testDepositoArredondamentoParaCima() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
 
         deposito.executar(10, BigDecimal.valueOf(12.279));
         assertEquals(BigDecimal.valueOf(12.28), conta.getSaldo(), "O saldo da conta deve ser alterado para 12.28");
@@ -96,7 +96,7 @@ public class DepositoTest {
     void testDepositoArredondamentoParaBaixo() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
 
         deposito.executar(10, BigDecimal.valueOf(12.2709));
         assertEquals(BigDecimal.valueOf(12.27), conta.getSaldo(), "O saldo da conta deve ser alterado para 12.27");
@@ -106,7 +106,7 @@ public class DepositoTest {
     void testDepositoArredondamentoImpar() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
 
         deposito.executar(10, BigDecimal.valueOf(10.275));
         assertEquals(BigDecimal.valueOf(10.28), conta.getSaldo(), "O saldo da conta deve ser alterado para 10.28");
@@ -116,7 +116,7 @@ public class DepositoTest {
     void testDepositoArredondamentoPar() {
         Conta conta = new Conta(ModalidadeConta.CC, null);
         when(repository.findContaByNumeroConta(10)).thenReturn(Optional.of(conta));
-        assertEquals(BigDecimal.ZERO, conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
+        assertEquals(BigDecimal.ZERO.setScale(2), conta.getSaldo(), "O saldo inicial da conta deve ser igual a 0.00.");
 
         deposito.executar(10, BigDecimal.valueOf(10.265));
         assertEquals(BigDecimal.valueOf(10.26), conta.getSaldo(), "O saldo da conta deve ser alterado para 10.26");

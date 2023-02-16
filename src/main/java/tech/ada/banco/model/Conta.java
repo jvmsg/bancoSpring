@@ -63,7 +63,7 @@ public class Conta {
     }
 
     public BigDecimal getSaldo() {
-        return saldo;
+        return saldo.setScale(2, RoundingMode.HALF_EVEN);
     }
 
     public void deposito(BigDecimal valor) {
@@ -71,7 +71,7 @@ public class Conta {
             throw new ValorInvalidoException();
         }
 
-        saldo = saldo.add(valor.setScale(2, RoundingMode.HALF_EVEN));
+        saldo = saldo.add(valor);
     }
 
     public void saque(BigDecimal valor) {
@@ -82,7 +82,7 @@ public class Conta {
         if (valor.compareTo(saldo) > 0) {
             throw new SaldoInsuficienteException();
         } else {
-            saldo = saldo.subtract(valor.setScale(2, RoundingMode.HALF_EVEN));
+            saldo = saldo.subtract(valor);
         }
     }
 
