@@ -2,8 +2,10 @@ package tech.ada.banco.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import tech.ada.banco.exceptions.ContaOrigemIgualDestinoException;
 import tech.ada.banco.exceptions.ResourceNotFoundException;
 import tech.ada.banco.exceptions.SaldoInsuficienteException;
+import tech.ada.banco.exceptions.ValorInvalidoException;
 import tech.ada.banco.model.Conta;
 import tech.ada.banco.model.ModalidadeConta;
 import tech.ada.banco.repository.ContaRepository;
@@ -81,7 +83,7 @@ class PixTest {
         try {
             pix.executar(10, 10, BigDecimal.ONE);
             fail("Não deveria ser possível realizar um pix da conta 10 para a conta 10.");
-        } catch (IllegalArgumentException e) {
+        } catch (ContaOrigemIgualDestinoException e) {
         }
 
         verify(repository, times(0)).save(any());
@@ -105,7 +107,7 @@ class PixTest {
         try {
             pix.executar(10, 5, BigDecimal.valueOf(-10));
             fail("A conta deveria lançar o erro ValorInvalidoException ao tentar realizar pix de um valor negativo.");
-        } catch (IllegalArgumentException e) {}
+        } catch (ValorInvalidoException e) {}
 
         assertEquals(BigDecimal.TEN.setScale(2), conta10.getSaldo(), "O saldo da conta deve continuar sendo igual a 10.00.");
         assertEquals(BigDecimal.ZERO.setScale(2), conta5.getSaldo(), "O saldo da conta deve continuar sendo igual a 0.00.");
